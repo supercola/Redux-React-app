@@ -24,3 +24,49 @@ const initialState = Map({
         })
     ])
 });
+
+export default handleActions({
+    [CREATE]: (state, action) => {
+        const counters = state.get('counters');
+
+        return state.set('counters', counters.push(
+            Map({
+                color: action.payload,
+                number: 0
+            })
+        ))
+    },
+
+    [REMOVE]: (state, action) => {
+        const counters = state.get('counters');
+
+        return state.set('counters', counters.pop())
+    },
+
+    [INCREMENT]: (state, action) => {
+        const counters = state.get('counters');
+
+        return state.set('counters', counters.update(
+            action.payload,
+            (counter) => counter.set('number', counter.get('number') + 1))
+        );
+    },
+
+    [DECREMENT]: (state, action) => {
+        const counters = state.get('counters');
+
+        return state.set('counters', counters.update(
+            action.payload,
+            (counter) => counter.set('number', counter.get('number') - 1))
+        );
+    },
+
+    [SET_COLOR]: (state, action) => {
+        const counters = state.get('counters');
+
+        return state.set('counters', counters.update(
+            action.payload.index,
+            (counter) => counter.set('color', action.payload.color))
+        );
+    },
+}, initialState);
